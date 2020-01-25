@@ -8,7 +8,7 @@ router.post("/", (req, res) => {
 
   const file = req.files.file;
 
-  file.mv(`${__dirname}/client/public/uploads/${file.name}`, err => {
+  file.mv(`${__dirname}/../client/public/uploads/${file.name}`, err => {
     if (err) {
       console.error(err);
       return res.status(500).json({ msg: `Server error ${err}` }); //server err

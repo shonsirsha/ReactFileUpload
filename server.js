@@ -6,7 +6,7 @@ app.use(fileUpload());
 
 //upload endpoint
 
-app.use("/api/upload", require("./routes/upload"));
+app.use("/api/uploads", require("./routes/upload"));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === "production") {
