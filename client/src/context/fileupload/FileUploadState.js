@@ -1,4 +1,4 @@
-import { SET_FILE, SET_LOADING, UPLOAD_FILE, SET_ERROR } from "../types";
+import { SET_FILE, SET_LOADING, SET_ERROR, SET_UPLOADED_FILE } from "../types";
 import FileUploadReducer from "./fileUploadReducer";
 import FileUploadContext from "./fileUploadContext";
 import axios from "axios";
@@ -28,7 +28,7 @@ const FileUploadState = props => {
           "Content-Type": "multipart/form-data"
         }
       });
-      dispatch({ type: UPLOAD_FILE, payload: res.data });
+      dispatch({ type: SET_UPLOADED_FILE, payload: res.data });
     } catch (err) {
       dispatch({ type: SET_ERROR, payload: err.response.data.msg });
     }
