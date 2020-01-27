@@ -1,8 +1,11 @@
 import React, { Fragment, useContext, useState } from "react";
 import FileUploadContext from "../context/fileupload/fileUploadContext";
+import AlertContext from "../context/alerts/alertContext";
 
 const FileUpload = () => {
   const fileUploadContext = useContext(FileUploadContext);
+  const alertContext = useContext(AlertContext);
+
   const { setFile, file, uploadFile, uploadedFile } = fileUploadContext;
   const [fileName, setFileName] = useState("Choose A File");
   //   useEffect(()=>{
@@ -18,9 +21,12 @@ const FileUpload = () => {
 
   const onSubmit = e => {
     e.preventDefault();
+    alertContext.clearAllAlerts();
+    alertContext.setAlert("Please pick a file", "danger");
 
     if (file !== null) {
       uploadFile();
+      alertContext.setAlert("File has been uploaded", "success");
     }
   };
   return (
@@ -32,6 +38,7 @@ const FileUpload = () => {
             className='custom-file-input'
             id='customFile'
             onChange={onChange}
+            accept='image/*'
           />
           <label className='custom-file-label' htmlFor='customFile'>
             {fileName}

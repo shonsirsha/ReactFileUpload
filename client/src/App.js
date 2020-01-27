@@ -1,6 +1,8 @@
 import React from "react";
 import FileUpload from "./components/FileUpload";
+import Alert from "./components/layouts/Alerts";
 import FileUploadState from "./context/fileupload/FileUploadState";
+import AlertState from "./context/alerts/AlertState";
 
 import "./App.css";
 
@@ -11,7 +13,10 @@ const App = () => {
         <i className='fab fa-react'></i> React File Upload
       </h4>
       <FileUploadState>
-        <FileUpload />
+        <AlertState>
+          <Alert />
+          <FileUpload />
+        </AlertState>
       </FileUploadState>
     </div>
   );

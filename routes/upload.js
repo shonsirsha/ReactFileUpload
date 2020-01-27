@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
-
 router.post("/", (req, res) => {
   if (req.files === null) {
     return res.status(400).json({ msg: "No file was uploaded." }); // bad req
