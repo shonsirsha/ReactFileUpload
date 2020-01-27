@@ -1,12 +1,21 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useState, useEffect } from "react";
 import FileUploadContext from "../context/fileupload/fileUploadContext";
 import AlertContext from "../context/alerts/alertContext";
+import ProgressBar from "./layouts/ProgressBar";
 
 const FileUpload = () => {
   const fileUploadContext = useContext(FileUploadContext);
   const alertContext = useContext(AlertContext);
 
-  const { setFile, file, uploadFile, uploadedFile } = fileUploadContext;
+  const [localProgress, setLocalProgress] = useState(0);
+
+  const {
+    setFile,
+    file,
+    uploadFile,
+    uploadedFile,
+    uploadProgress
+  } = fileUploadContext;
   const [fileName, setFileName] = useState("Choose A File");
   //   useEffect(()=>{
   //       if(file === null){
@@ -29,6 +38,10 @@ const FileUpload = () => {
       alertContext.setAlert("File has been uploaded", "success");
     }
   };
+
+  useEffect(() => {
+    setLocalProgress(uploadProgress);
+  }, [uploadProgress]);
   return (
     <Fragment>
       <form onSubmit={onSubmit}>
@@ -44,7 +57,7 @@ const FileUpload = () => {
             {fileName}
           </label>
         </div>
-
+        {localProgress > 0 && <ProgressBar percentage={localProgress} />}
         <input
           type='submit'
           value='Upload'

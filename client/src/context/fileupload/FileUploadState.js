@@ -1,16 +1,18 @@
-import { SET_FILE, SET_LOADING, SET_ERROR, SET_UPLOADED_FILE } from "../types";
+import { SET_FILE, SET_ERROR, SET_UPLOADED_FILE } from "../types";
 import FileUploadReducer from "./fileUploadReducer";
 import FileUploadContext from "./fileUploadContext";
+
 import axios from "axios";
 
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 
 const FileUploadState = props => {
   const initialState = {
     file: null,
     loading: true,
     error: null,
-    uploadedFile: null
+    uploadedFile: null,
+    uploadProgress: 0
   };
   const [state, dispatch] = useReducer(FileUploadReducer, initialState);
 
@@ -20,12 +22,18 @@ const FileUploadState = props => {
   };
 
   const uploadFile = async () => {
+    state.uploadProgress = 0;
     const formData = new FormData();
     formData.append("file", state.file); // check backend (req.files.X) where X is "file"
     try {
       const res = await axios.post("/api/uploads", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
+        },
+        onUploadProgress: progressEvent => {
+          state.uploadProgress = parseInt(
+            Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          );
         }
       });
       dispatch({ type: SET_UPLOADED_FILE, payload: res.data });
@@ -41,6 +49,7 @@ const FileUploadState = props => {
         loading: state.loading,
         error: state.error,
         uploadedFile: state.uploadedFile,
+        uploadProgress: state.uploadProgress,
         setFile,
         uploadFile
       }}
