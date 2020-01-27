@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const path = require("path");
 
 router.post("/", (req, res) => {
   if (req.files === null) {
@@ -8,13 +9,19 @@ router.post("/", (req, res) => {
 
   const file = req.files.file;
 
-  file.mv(`${__dirname}/../client/public/uploads/${file.name}`, err => {
+  const fileExt = path.extname(file.name);
+  let newFileName =
+    file.name.substr(0, file.name.lastIndexOf(".")).replace(/ /g, "") +
+    Date.now() +
+    fileExt;
+
+  file.mv(`${__dirname}/../client/public/images/${newFileName}`, err => {
     if (err) {
       console.error(err);
       return res.status(500).json({ msg: `Server error ${err}` }); //server err
     }
 
-    res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+    res.json({ fileName: file.name, filePath: `/images/${newFileName}` });
   });
 });
 
